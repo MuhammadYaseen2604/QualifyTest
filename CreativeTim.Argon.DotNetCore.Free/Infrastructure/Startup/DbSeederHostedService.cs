@@ -19,7 +19,7 @@ namespace CreativeTim.Argon.DotNetCore.Free.Infrastructure.Startup
         private readonly ILogger<DbSeederHostedService> _logger;
 
         public DbSeederHostedService(
-            IServiceProvider serviceProvider, 
+            IServiceProvider serviceProvider,
             ILogger<DbSeederHostedService> logger)
         {
             _serviceProvider = serviceProvider;
@@ -33,7 +33,7 @@ namespace CreativeTim.Argon.DotNetCore.Free.Infrastructure.Startup
             using (var scope = _serviceProvider.CreateScope())
             {
                 await IdentityDataSeeder<ApplicationUser, IdentityRole>.SeedDataAsync(
-                    scope.ServiceProvider, 
+                    scope.ServiceProvider,
                     _logger);
             }
         }

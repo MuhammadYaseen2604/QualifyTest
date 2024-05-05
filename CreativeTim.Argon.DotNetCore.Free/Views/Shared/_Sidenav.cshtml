@@ -40,10 +40,10 @@
                         </a>
                     </li>
                     @*<li class="nav-item">
-                        <a class="nav-link @(Context.Request.Path == "/icons" ? "active" : "")" href="@Url.Action("Icons")">
-                            <i class="ni ni-planet text-orange"></i> Icons
-                        </a>
-                    </li>*@
+            <a class="nav-link @(Context.Request.Path == "/icons" ? "active" : "")" href="@Url.Action("Icons")">
+                <i class="ni ni-planet text-orange"></i> Icons
+            </a>
+        </li>*@
                     <li class="nav-item">
                         <a class="nav-link @(Context.Request.Path == "/maps" ? "active" : "")" href="@Url.Action("Maps")">
                             <i class="ni ni-pin-3 text-primary"></i> Google
@@ -54,10 +54,16 @@
                             <i class="ni ni-single-02 text-yellow"></i> Profile
                         </a>
                     </li>
-                   
-                    
+
+                    <li class="nav-item">
+                        <a class="nav-link @(Context.Request.Path == "/DynamicNavigation/getAll" ? "active" : "")" href="@Url.Action("Index", "DynamicNavigation")">
+                            <i class="ni ni-single-02 text-yellow"></i> Category
+                        </a>
+                    </li>
+
+
                     @* Not required for now *@
-                    
+
                     @* <li class="nav-item"> *@
                     @*     <a class="nav-link" href="#"> *@
                     @*         <i class="ni ni-key-25 text-info"></i> Login *@
@@ -68,8 +74,8 @@
                     @*         <i class="ni ni-circle-08 text-pink"></i> Register *@
                     @*     </a> *@
                     @* </li> *@
-                    
-               
+
+
                 </ul>
 
                 <!-- Divider -->

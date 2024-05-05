@@ -1,24 +1,26 @@
 using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using CreativeTim.Argon.DotNetCore.Free.Data;
 using CreativeTim.Argon.DotNetCore.Free.Infrastructure;
 using CreativeTim.Argon.DotNetCore.Free.Infrastructure.ApplicationUserClaims;
 using CreativeTim.Argon.DotNetCore.Free.Infrastructure.AppSettingsModels;
+using CreativeTim.Argon.DotNetCore.Free.Infrastructure.Startup;
 using CreativeTim.Argon.DotNetCore.Free.Models.Identity;
+using CreativeTim.Argon.DotNetCore.Free.Repository;
+using CreativeTim.Argon.DotNetCore.Free.Services.Interface;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using CreativeTim.Argon.DotNetCore.Free.Infrastructure.Startup;
 
 namespace CreativeTim.Argon.DotNetCore.Free
 {
@@ -60,11 +62,11 @@ namespace CreativeTim.Argon.DotNetCore.Free
                 // Or use this for PostgreSQL:
                 //options.UseNpgsql(Configuration.GetConnectionString("PostgresConnection"));
 
-                 // Use this to connect to a MySQL server:
-                 // options.UseMySQL(Configuration.GetConnectionString("MysqlConnection"));
-                 //Or use this for SQL Server (if running on Windows):
-                 options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
-        });
+                // Use this to connect to a MySQL server:
+                // options.UseMySQL(Configuration.GetConnectionString("MysqlConnection"));
+                //Or use this for SQL Server (if running on Windows):
+                options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
+            });
 
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddRoles<IdentityRole>()
@@ -129,7 +131,7 @@ namespace CreativeTim.Argon.DotNetCore.Free
             services.Configure<ScriptTags>(Configuration.GetSection(nameof(ScriptTags)));
 
             services.AddControllersWithViews(options =>
-            { 
+            {
                 // Slugify routes so that we can use /employee/employee-details/1 instead of
                 // the default /Employee/EmployeeDetails/1
                 //
@@ -181,6 +183,8 @@ namespace CreativeTim.Argon.DotNetCore.Free
             // You can remove this if you want to prevent the seeding process or you can change the initial data
             // to suit your needs in the IdentityDataSeeder class.
             services.AddHostedService<DbSeederHostedService>();
+            // Register the INavigationItemRepository service
+            services.AddScoped<INavigationItemRepository, NavigationItemRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <partial name="_PageHeadElement"/>
-    
+    <partial name="_PageHeadElement" />
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
     @RenderSection("Styles", required: false)
     @RenderSection("HeadScripts", required: false)
 </head>
@@ -20,10 +27,10 @@
                     <!-- 1st Row: Crumbs and filters -->
                     <div class="row align-items-center py-4">
                         @RenderSection("Breadcrumbs", required: false)
-                        <div class="col-lg-6 col-5 text-right">
+                        @*<div class="col-lg-6 col-5 text-right">
                             <a href="#" class="btn btn-sm btn-neutral">New</a>
                             <a href="#" class="btn btn-sm btn-neutral">Filters</a>
-                        </div>
+                        </div>*@
                     </div>
                     @RenderSection("DashboardCards", required: false)
                 </div>

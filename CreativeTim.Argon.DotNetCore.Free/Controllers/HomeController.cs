@@ -2,12 +2,12 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using CreativeTim.Argon.DotNetCore.Free.Infrastructure;
 using CreativeTim.Argon.DotNetCore.Free.Infrastructure.ErrorHandling;
-using Microsoft.AspNetCore.Mvc;
 using CreativeTim.Argon.DotNetCore.Free.Models;
 using CreativeTim.Argon.DotNetCore.Free.Models.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
@@ -76,7 +76,7 @@ namespace CreativeTim.Argon.DotNetCore.Free.Controllers
             ProfileViewModel input)
         {
             if (!ModelState.IsValid)
-            { 
+            {
                 return RedirectToAction(nameof(Profile));
             }
 
@@ -85,7 +85,7 @@ namespace CreativeTim.Argon.DotNetCore.Free.Controllers
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-            
+
             var email = await _userManager.GetEmailAsync(user);
             if (input.Email != email)
             {
@@ -118,13 +118,18 @@ namespace CreativeTim.Argon.DotNetCore.Free.Controllers
 
             return RedirectToAction(nameof(Profile));
         }
+        [HttpGet("/tables")]
+        public IActionResult Tables()
+        {
+            return View();
+        }
 
         //[HttpGet("/tables")]
         //public IActionResult Tables()
         //{
         //    return View();
         //}
-        
+
         //[HttpGet("/upgrade")]
         //public IActionResult Upgrade()
         //{

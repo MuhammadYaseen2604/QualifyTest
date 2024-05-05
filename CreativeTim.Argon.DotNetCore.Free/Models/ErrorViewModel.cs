@@ -1,5 +1,3 @@
-using System;
-
 namespace CreativeTim.Argon.DotNetCore.Free.Models
 {
     public class ErrorViewModel

@@ -70,14 +70,14 @@ namespace CreativeTim.Argon.DotNetCore.Free.Data.Seeders
             }
         }
 
-        public static async Task SeedDataAsync(IServiceProvider services, ILogger logger) 
+        public static async Task SeedDataAsync(IServiceProvider services, ILogger logger)
         {
             var context = services.GetRequiredService<ApplicationDbContext>();
             var userManager = services.GetRequiredService<UserManager<TIdentityUser>>();
             var roleManager = services.GetRequiredService<RoleManager<TIdentityRole>>();
 
             var retries = 3;
-            ensureCreated:
+ensureCreated:
             try
             {
                 await context.Database.EnsureCreatedAsync();

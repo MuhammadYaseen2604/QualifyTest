@@ -11,9 +11,9 @@ namespace CreativeTim.Argon.DotNetCore.Free
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        static IWebHostBuilder CreateWebHostBuilder(string[] args) => 
+        static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .ConfigureKestrel(so => {})
+                .ConfigureKestrel(so => { })
                 .UseIISIntegration()
                 .UseStartup<Startup>();
     }

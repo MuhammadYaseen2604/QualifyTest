@@ -1,4 +1,5 @@
-﻿using CreativeTim.Argon.DotNetCore.Free.Models.Identity;
+using CreativeTim.Argon.DotNetCore.Free.Models.DynamicNav;
+using CreativeTim.Argon.DotNetCore.Free.Models.Identity;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,5 +14,17 @@ namespace CreativeTim.Argon.DotNetCore.Free.Data
         }
 
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
+        public DbSet<NavigationItem> navigationItems { get; set; }
+
+        // Other DbSet properties as needed
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Optional: Customize model configuration
+            base.OnModelCreating(modelBuilder);
+
+
+
+        }
     }
 }
