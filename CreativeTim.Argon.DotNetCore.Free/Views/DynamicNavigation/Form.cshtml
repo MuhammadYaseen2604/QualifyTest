@@ -16,7 +16,7 @@
                             <h2 class="mb-0">Navigation Item</h2>
                         </div>
                         <div class="col-lg-6 col-md-9 text-right">
-                            <button type="submit" class="btn btn-success">Save</button>
+                            <button type="submit" class="btn btn-success save">Save</button>
                             <button onclick="history.back(); return false;" class="btn btn-warning">Dismiss</button>
                         </div>
                     </div>
@@ -30,12 +30,7 @@
                             <input id="Code" name="Code" value="@ViewBag.SerialCode" class="form-control form-control-alternative " readonly required />
                         </div>
 
-                        @*<div class="form-group col-md-8">
-                                <label>
-                                    Address <b class="text-red">*</b>
-                                </label>
-                                @Html.DropDownList("AddressID", ViewBag.AddressesList as SelectList, "Select an Address", new { @class = "form-control" })
-                            </div>*@
+           
                     </div>
                     <div class="row">
                         <div class="form-group col-md-4">
@@ -48,38 +43,40 @@
         </div>
     </div>
 </form>
-    <script>
+<script>
         $(document).ready(function () {
-            //$('#saveNavigationForm').submit(function (event) {
-            //    debugger
-            //    event.preventDefault(); // Prevent the form from submitting normally
-            //    debugger
-             
-            //    // Serialize form data
-            //    var formData = $(this).serialize();
+            $('#saveNavigationForm').submit(function (event) {
+                debugger
+                event.preventDefault(); // Prevent the form from submitting normally
+                debugger
 
-            //    // AJAX request
-            //    $.ajax({
-            //        url: '/DynamicNavigation/SaveNavigationItem',
-            //        type: 'POST',
-            //        data: formData,
-            //        beforeSend: function () {
-            //            // Function to execute before sending the request (optional)
-            //            SubmitStart();
-            //        },
-            //        success: function (data) {
-            //            // Function to execute if the request succeeds
-            //            SubmitEnd(data);
-            //        },
-            //        error: function (xhr, status, error) {
-            //            // Function to execute if the request fails
-            //            console.error(error);
-            //        },
-            //        complete: function () {
-            //            // Function to execute after the request completes (after success/error)
-            //        }
-            //    });
-            //});
+                // Serialize form data
+                var formData = $(this).serialize();
+                debugger
+                // AJAX request
+                $.ajax({
+                    url: '/DynamicNavigation/SaveNavigationItem',
+                    type: 'POST',
+                    data: formData,
+                    beforeSend: function () {
+                        // Function to execute before sending the request (optional)
+                        SubmitStart();
+                    },
+                    success: function (data) {
+                        // Function to execute if the request succeeds
+                        SubmitEnd(data);
+                        // Reload navigation item list
+                        reloadNavigationItemList();
+                    },
+                    error: function (xhr, status, error) {
+                        // Function to execute if the request fails
+                        console.error(error);
+                    },
+                    complete: function () {
+                        // Function to execute after the request completes (after success/error)
+                    }
+                });
+            });
         });
 
         function SubmitStart() {
@@ -87,45 +84,28 @@
         }
 
         function SubmitEnd(data) {
-            // Code to execute after the AJAX request succeeds
-            if (data.responseJSON["isSuccess"] == "True") {
-                Swal.fire({
-                    title: data.responseJSON["Title"],
-                    text: data.responseJSON["Message"],
-                    type: data.responseJSON["Type"],
-                    timer: 1500,
-                    showCancelButton: false,
-                    showConfirmButton: false,
-                    onClose: () => {
-                        $('a[href="#/Navigation/DynamicNavigation"]').click()
-                    }
-                })
-            }
-            else {
-                Swal.fire(data.responseJSON["Title"], data.responseJSON["Message"], data.responseJSON["Type"])
+            debugger
+            // Check if data is defined and has expected properties
+            if (data && data.isSuccess !== undefined && data.message && data.type) {
+                if (data.isSuccess === "True") {
+                    console.log("data",data)
+                    var ButtonMessage = data.isSaved === "True" ? "Saved" : "Updated";
+                    $.notify(data.message, data.type);
+                    $(".save").notify(ButtonMessage, data.type);
+                } else {
+                    $.notify(data.message, data.type);
+                }
+            } else {
+                // Handle unexpected or incomplete data
+                console.error("Invalid or incomplete data received:", data);
             }
         }
 
-       
+        function reloadNavigationItemList() {
+            // Implement the logic to reload the navigation item list here
+            // Redirect to the list view URL
+            window.location.href = '/DynamicNavigation/Index';
+        }
 
-        //function SubmitEnd(data) {
-        //    spinner.hide()
-        //    if (data.responseJSON["isSuccess"] == "True") {
-        //        Swal.fire({
-        //            title: data.responseJSON["Title"],
-        //            text: data.responseJSON["Message"],
-        //            type: data.responseJSON["Type"],
-        //            timer: 1500,
-        //            showCancelButton: false,
-        //            showConfirmButton: false,
-        //            onClose: () => {
-        //                $('a[href="#/Navigation/DynamicNavigation"]').click()
-        //            }
-        //        })
-        //    }
-        //    else {
-        //        Swal.fire(data.responseJSON["Title"], data.responseJSON["Message"], data.responseJSON["Type"])
-        //    }
-        //}
 
-    </script>
+</script>

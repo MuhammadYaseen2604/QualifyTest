@@ -145,6 +145,16 @@ namespace CreativeTim.Argon.DotNetCore.Free
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
             services.AddRazorPages(options =>
                 {
                     options.Conventions.AddAreaPageRoute("Identity", "/Account/Register", "/register");
@@ -192,6 +202,7 @@ namespace CreativeTim.Argon.DotNetCore.Free
         {
             // This is required to make the application work behind a proxy like NGINX or HAPROXY
             // that also provides TLS termination (switching from incoming HTTPS to HTTP)
+            app.UseCors(); // Add this line to enable CORS
             app.UseForwardedHeaders();
 
             if (env.IsDevelopment())

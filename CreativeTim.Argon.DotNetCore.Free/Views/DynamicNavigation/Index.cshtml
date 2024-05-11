@@ -19,10 +19,14 @@
                         <div class="text-right">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <a class="btn btn-primary"  href="/DynamicNavigation/Form">Create</a>
+                                    <a class="btn btn-primary" href="/DynamicNavigation/Form">Create</a>
+                                    <a class="btn btn-primary text-white" id="createButton" onclick="showCreateModal()">Setup Navigation</a>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group my-0">
+                                        <span>
+
+                                        </span>
                                         <div class="input-group input-group-alternative">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa fa-search"></i></span>
@@ -54,8 +58,40 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="createNavModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createModalLabel">Create Setups</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @*@{ Html.Partial("~/Views/DynamicNavigation/PartialViews/_CreateNav.cshtml"); }*@
+                <partial name="~/Views/DynamicNavigation/PartialViews/_CreateNav.cshtml" />
+            </div>
+            <hr />
+            <br />
+            <div class="table-responsive" data-simplebar>
+                <table id="ParentChildListTable" class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Parent Nav</th>
+                            <th scope="col">Child Nav</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
 <script>
     var dataTable;
+    //var dataTable2;
 
         $(document).ready(function () {
             // Init DataTable
@@ -68,26 +104,25 @@
                     "type": "GET",
                     "datatype": "json",
                     "dataSrc": "navigationItems" // JSON response ke andar data ka location
-                
+
                 },
                 "columns": [
                     { "data": "code" },
                     { "data": "name" }, // Columns ka data source
-                    //{ "data": "ParentNavigation" }, 
+                    //{ "data": "ParentNavigation" },
                     { "data": "navigationId" }
                 ],
                 "columnDefs": [
-                    
+
                     {
                         "targets": 2,
                         "render": function(data, type, row) {
                             if ('@Delete' == "true") {
-                                debugger
-                                return '<a class="fa fa-fw fa-lg fa-pencil-alt text-primary" href="#/DynamicNavigation/Form?ID=' + data + '" data-toggle="tooltip" title="Edit"/>' +
+                                return '<a class="fa fa-fw fa-lg fa-pencil-alt text-primary" href="/DynamicNavigation/Form?ID=' + data + '" data-toggle="tooltip" title="Edit"/>' +
                                     '<a class="fa fa-fw fa-lg fa-trash text-danger" href="javascript:void(0)" onclick="DeleteNavigation(' + data + ')" data-toggle="tooltip" title="Delete"/>'
                              }
                             else {
-                                return '<a class="fa fa-fw fa-lg fa-pencil-alt text-primary" href="#/DynamicNavigation/Form?ID=' + data + '" data-toggle="tooltip" title="Edit"/>'
+                                return '<a class="fa fa-fw fa-lg fa-pencil-alt text-primary" href="/DynamicNavigation/Form?ID=' + data + '" data-toggle="tooltip" title="Edit"/>'
                              }
                         }
                     }
@@ -108,11 +143,12 @@
         $('#DataTableSearch').val("").trigger('keyup')
     });
 
+
     function DeleteNavigation(NavigationId) {
         Swal.fire({
             title: 'Are you sure?',
-            text: "Store will be deleted from the system!",
-            type: 'warning',
+            text: "Navigation Item will be deleted from the system!",
+            //type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#f5365c',
             cancelButtonColor: '#2dce89',
@@ -120,23 +156,228 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: '/DynamicNav/NavigationItem/DeleteNavigationItem?Id=' + NavigationId,
+                    url: '/DynamicNavigation/DeleteNavigationItem?Id=' + NavigationId,
                     error: (error) => { console.log(error) },
                     success: (response) => {
-                        Swal.fire({
-                            title: response["Title"],
-                            text: response["Message"],
-                            type: response["Type"],
-                            timer: 1500,
-                            showCancelButton: false,
-                            showConfirmButton: false,
-                            onClose: () => {
-                                dataTable.ajax.reload();
-                            }
-                        })
+                        debugger
+                        console.log(response);
+                        $.notify("Navigation Item is Deleted", response.type);
+
+                        setTimeout(function () {
+                            // Yahan DataTable reload ka code likhein
+                            // Jaise ki, agar DataTable ka variable 'dataTable' hai:
+                            dataTable.ajax.reload();
+                        }, 1000);
+
                     }
                 })
             }
         })
     }
+
+    function DeleteParentChildNavigation(NavigationId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Navigation Item will be deleted from the system!",
+            //type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#f5365c',
+            cancelButtonColor: '#2dce89',
+            confirmButtonText: 'Delete'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: '/DynamicNavigation/DeleteParentChildNavigation?Id=' + NavigationId,
+                    error: (error) => { console.log(error) },
+                    success: (response) => {
+                        debugger
+                        console.log(response);
+                        if (response.type === "success") {
+                            $.notify(response.message, response.type);
+
+                        } else {
+                            $.notify(response.message, response.type);
+                        }
+
+                        setTimeout(function () {
+                            // Yahan DataTable reload ka code likhein
+                            // Jaise ki, agar DataTable ka variable 'dataTable' hai:
+                            getParentChildNavigationList();
+                        }, 1000);
+
+                    }
+                })
+            }
+        })
+    }
+
+    //click on create Button for modal popup
+    function showCreateModal() {
+
+        if (typeof jQuery === 'undefined' || typeof jQuery.fn.select2 === 'undefined') {
+            console.error('jQuery or Select2 is not loaded.');
+            return;
+        }
+
+        $('#createNavModal').modal('show');
+        //for clear inputs after clicking cretae
+        $('.select2-container--classic .select2-selection--single .select2-selection__rendered').css('line-height', '12px');
+        //var ModalParentDropdown = $('#ParentNav');
+        //var materialChildDropdown = $('#ChildNav');
+        //ModalParentDropdown.val(null).trigger('change'); // Clear the selected value and trigger change event to update select2 control
+        //materialChildDropdown.val(null).trigger('change'); // Clear the selected value and trigger change event to update select2 control
+    }
+
+    function getParentChildNavigationList() {
+
+        $.ajax({
+            url: '/DynamicNavigation/GetAllParentChildNavigation', // Modify the URL as per your controller route
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+
+                // Check if DataTable is already initialized
+                if ($.fn.DataTable.isDataTable('#ParentChildListTable')) {
+                    // If DataTable is already initialized, destroy it first
+                    $('#ParentChildListTable').DataTable().destroy();
+                }
+                //console.log("response", response.parentChildnavigationItems)
+                // Initialize DataTable with received data
+                $('#ParentChildListTable').DataTable({
+                    data: response.parentChildnavigationItems,
+                    columns: [
+                        { data: 'parentId' },
+                        { data: 'childId' },
+                        { data: 'parentChildNavId' }
+                        // Add more columns as needed
+                    ],
+                    columnDefs: [
+                        {
+                            targets: 2,
+                            render: function (data, type, row) {
+                                return '<a class="fa fa-fw fa-lg fa-trash text-danger" href="javascript:void(0)" onclick="DeleteParentChildNavigation(' + data + ')" data-toggle="tooltip" title="Delete"/>'
+                            }
+                        }
+                    ]
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+
+    }
+    //when modal is show then some action will be performed here
+    $('#createNavModal').on('show.bs.modal', function () {
+        debugger
+        if (typeof jQuery === 'undefined' || typeof jQuery.fn.select2 === 'undefined') {
+            console.error('jQuery or Select2 is not loaded.');
+            return;
+        }
+
+              //Apply select2 on dropdown
+        $('#ParentNav').select2({width: '100%', theme: 'classic', dropdownParent: $('#createNavModal') });
+        $('#ChildNav').select2({ width: '100%', theme: 'classic', dropdownParent: $('#createNavModal') });
+        $('#ParentNav').val("").trigger('change');
+        $('#ChildNav').empty();
+
+        getParentChildNavigationList();
+    });
+
+    //when any changes occur in modal Dropdown of setup
+    $('#ParentNav').on('change', function () {
+        debugger
+        // Set focus on the modal to prevent it from closing unexpectedly
+        $('#createNavModal').focus();
+        if (typeof jQuery === 'undefined' || typeof jQuery.fn.select2 === 'undefined') {
+            console.error('jQuery or Select2 is not loaded.');
+            return;
+        }
+
+        $('#ChildNav').empty();
+        //Apply select2 on dropdown
+        //$('#ParentNav').select2({ width: '100%', theme: "classic", dropdownParent: $('#createNavModal') });
+        //$('#ChildNav').select2({ width: '100%', theme: "classic", dropdownParent: $('#createNavModal') });
+        $('.select2-container--classic .select2-selection--single .select2-selection__rendered').css('line-height', '12px');
+
+        //var selectedMaterialType = $('#ChildNav').val(); // Retrieve the current selected material type
+        var option = $("#ParentNav").val();
+
+        //var materialTypeDropdown = $('#ChildNav');
+        //materialTypeDropdown.val(null).trigger('change'); // Clear the selected value and trigger change event to update select2 control
+
+        if (option == '') {
+            $('#ChildNav').prop('required', false);
+        } else {
+
+            $('#ChildNav').prop('required', true);
+
+            // Make an AJAX request to retrieve data for Category
+            $.ajax({
+                url: '/DynamicNavigation/GetAvailableChildNav?Id=' + option, // Replace with your controller action URL
+                method: 'GET',
+                success: function (data) {
+                    // Populate Child Nav dropdown
+                    $('#ChildNav').empty();
+                        $('#ChildNav').append('<option value=" "> ---Plesae Select Child Nav--- </option>');
+                    $.each(data, function (index, item) {
+                        $('#ChildNav').append('<option value="' + item.value + '">' + item.text + '</option>');
+                    });
+                },
+                error: function () {
+                    // Handle error
+                }
+            });
+
+
+        }
+
+        //materialTypeDropdown.val(selectedMaterialType).trigger('change'); // Select the previous material type and trigger change event to update select2 control
+
+
+    });
+
+    $('#createModalForm').submit(function (e) {
+        e.preventDefault(); // Prevent default form submission
+
+        // Serialize form data
+        var formData = $(this).serialize();
+
+        // Submit form data using AJAX
+        $.ajax({
+            url: $(this).attr('action'), // Form action URL
+            type: $(this).attr('method'), // Form method (POST)
+            data: formData, // Form data
+            dataType: 'json', // Expected data type from server
+            success: function (response) {
+                // Handle successful response
+
+                if (response.isSuccess === "True") {
+                    debugger
+                    $.notify(response.message, response.type);
+                    $("#saveProductBtn").notify("Saved", response.type);
+                    //$('#createNavModal').modal('hide');
+
+                    // Call getParentChildNavigationList after successful form submission
+
+                    $('#ParentNav').val("").trigger('change');
+                    $('#ChildNav').empty();
+                    getParentChildNavigationList();
+                   
+                } else {
+                    $.notify(response.message, response.type);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle error response
+                // Here you can handle any errors that occur during the AJAX request
+                // For example, you can display an error message using a notification library
+                // Example:
+                // notify('error', 'An error occurred while saving data: ' + error);
+            }
+        });
+
+    });
+
+
 </script>

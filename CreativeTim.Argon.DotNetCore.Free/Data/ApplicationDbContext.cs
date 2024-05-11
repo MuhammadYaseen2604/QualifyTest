@@ -22,9 +22,11 @@ namespace CreativeTim.Argon.DotNetCore.Free.Data
         {
             // Optional: Customize model configuration
             base.OnModelCreating(modelBuilder);
-
-
-
+            modelBuilder.Entity<NavigationItem>()
+               .HasMany(n => n.ParentNavigation)
+               .WithOne()
+               .HasForeignKey(n => n.ParentId)
+               .OnDelete(DeleteBehavior.Restrict); // Specify ON DELETE NO ACTION or ON UPDATE NO ACTION here
         }
     }
 }

@@ -1,0 +1,61 @@
+@model CreativeTim.Argon.DotNetCore.Free.ViewModels.ParentChildViewModel
+
+<h4>NavigationItem</h4>
+<hr />
+@using (Html.BeginForm("SaveDynamicNav", "DynamicNavigation", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "createModalForm", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <!-- Hidden input fields for IDs -->
+    @*@Html.HiddenFor(model => model.materialSubType.MaterialSubTypeID)*@
+
+
+    <div class="form-group">
+        <label for="ParentNav" class="black">Parent Nav</label>
+        <select asp-for="ParentId" asp-items="ViewBag.ParentNav" class="form-control select2" id="ParentNav" required>
+            <option value="">-- Select Parent Nav --</option>
+        </select>
+    </div>
+
+
+    <div class="form-group">
+        <label for="ChildNav" class="black" style="color:black;">Child Nav</label>
+        <select asp-for="Id" class="form-control select2" id="ChildNav">
+            <option value="">-- Select Child Nav --</option>
+        </select>
+    </div>
+
+
+
+    @*<div class="form-group">
+            <label for="Name" class="mb-0 black">Name</label>
+            <input asp-for="Name" class="form-control" id="ModalName" style="width: 100%;" required />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>*@
+
+    @*<div class="form-group">
+            <label for="IsInActive" class="mb-0 black">IsInActive</label>
+            <input asp-for="IsInactive" class="form-control" />
+        </div>*@
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" id="saveProductBtn">Save changes</button>
+    </div>
+}
+
+
+@*<div>
+    <a asp-action="Index">Back to List</a>
+</div>*@
+
+@*@section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }*@
+<script>
+
+
+
+  
+</script>

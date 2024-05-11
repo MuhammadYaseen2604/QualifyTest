@@ -1,7 +1,17 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
-
 <!-- Sidenav -->
+@{
+
+//var Model1 = ._context.NavigationItems
+//    .Include(n => n.ChildRelationships)
+//    .ThenInclude(pc => pc.Child)
+//    .Where(n => n.ParentRelationships.Count == 0) // Get top-level items
+//    .OrderBy(n => n.Order)
+//    .ToListAsync();
+
+
+ }
 <nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
     <div class="scrollbar-inner">
 
@@ -40,10 +50,10 @@
                         </a>
                     </li>
                     @*<li class="nav-item">
-            <a class="nav-link @(Context.Request.Path == "/icons" ? "active" : "")" href="@Url.Action("Icons")">
-                <i class="ni ni-planet text-orange"></i> Icons
-            </a>
-        </li>*@
+                            <a class="nav-link @(Context.Request.Path == "/icons" ? "active" : "")" href="@Url.Action("Icons")">
+                                <i class="ni ni-planet text-orange"></i> Icons
+                            </a>
+                        </li>*@
                     <li class="nav-item">
                         <a class="nav-link @(Context.Request.Path == "/maps" ? "active" : "")" href="@Url.Action("Maps")">
                             <i class="ni ni-pin-3 text-primary"></i> Google
@@ -57,7 +67,7 @@
 
                     <li class="nav-item">
                         <a class="nav-link @(Context.Request.Path == "/DynamicNavigation/getAll" ? "active" : "")" href="@Url.Action("Index", "DynamicNavigation")">
-                            <i class="ni ni-single-02 text-yellow"></i> Category
+                            <i class="fa fa-bars text-primary"></i> Dynamic Navigation
                         </a>
                     </li>
 
@@ -78,14 +88,31 @@
 
                 </ul>
 
+
+
+                @*<ul>
+                    @foreach (var item in Model1)
+                     {
+                        <li>@item.Name</li>
+                       
+                        @if (item.Children != null && item.Children.Any())
+                         {
+                           <ul>
+                             @foreach (var child in item.Children)
+                              {
+                                <li>@child.Name</li>
+                              }
+                           </ul>
+                         }
+                     }
+                </ul>*@
+
                 <!-- Divider -->
                 <!--<hr class="my-3">-->
-
                 <!-- Heading -->
                 <!--<h6 class="navbar-heading p-0 text-muted">
                     <span class="docs-normal">Documentation</span>
                 </h6>-->
-
                 <!-- Navigation -->
                 <!--<ul class="navbar-nav mb-md-3">
                     <li class="nav-item">
