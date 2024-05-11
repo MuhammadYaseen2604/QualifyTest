@@ -292,12 +292,4 @@ Affiliate Program (earn money): [https://www.creative-tim.com/affiliates/new](ht
 
 Social Media:
 
-Twitter: <https://twitter.com/CreativeTim?ref=adasp-readme>
-
-Facebook: <https://www.facebook.com/CreativeTim?ref=adasp-readme>
-
-Dribbble: <https://dribbble.com/creativetim?ref=adasp-readme>
-
-Google+: <https://plus.google.com/+CreativetimPage?ref=adasp-readme>
-
-Instagram: <https://www.instagram.com/CreativeTimOfficial?ref=adasp-readme>
+LinkedIn: https://www.linkedin.com/in/muhammad-yaseen-143004139/ 
