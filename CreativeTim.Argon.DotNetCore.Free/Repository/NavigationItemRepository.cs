@@ -44,10 +44,13 @@ namespace CreativeTim.Argon.DotNetCore.Free.Repository
 
         public NavigationItem UpdateNavigationItem(NavigationItem navigationItem)
         {
-            _context.Update(navigationItem);
+            var exist = _context.navigationItems.Find(navigationItem.Id);
+            exist.Name = navigationItem.Name.ToUpper();
+
+            _context.Entry(exist).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
 
-            return navigationItem;
+            return exist;
         }
 
         public NavigationItem Update(NavigationItem navigationItem)
